@@ -69,7 +69,7 @@ class Program
     }
     public static void Main()
     {
-        //Зчитує три рази номер картки і визначає відповідну властивість.
+        //Приклад роботи з функціями. Зчитує три рази номер картки і визначає відповідну властивість.
         Console.WriteLine(GetCreditCardVendor(Console.ReadLine()));
         Console.WriteLine(IsCreditCardNumberValid(Console.ReadLine()));
         Console.WriteLine(GenerateNextCreditCardNumber(Console.ReadLine()));
