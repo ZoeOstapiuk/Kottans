@@ -39,13 +39,15 @@ class Program
         int iSum = 0;
         for (int i = CardNumber.Length - 1; i >= 0; i--)
         {
-            if ((Convert.ToInt16(CardNumber[i]) * 2) > 9)
-                iSum += (Convert.ToInt16(CardNumber[i]) * 2) - 9;
-            else
-                iSum += Convert.ToInt16(CardNumber[i]) * 2;
+            iSum += Convert.ToInt16(CardNumber[i].ToString());
             i--;
             if (i >= 0)
-                iSum += Convert.ToInt16(CardNumber[i]) * 2;
+            {
+                if ((Convert.ToInt16(CardNumber[i].ToString()) * 2) > 9)
+                    iSum += (Convert.ToInt16(CardNumber[i].ToString()) * 2) - 9;
+                else
+                    iSum += Convert.ToInt16(CardNumber[i].ToString()) * 2;
+            }
         }
         return (iSum % 10) == 0;
     }
@@ -69,7 +71,7 @@ class Program
     }
     public static void Main()
     {
-        //Приклад роботи з функціями. Зчитує три рази номер картки і визначає відповідну властивість.
+        //Зчитує три рази номер картки і визначає відповідну властивість.
         Console.WriteLine(GetCreditCardVendor(Console.ReadLine()));
         Console.WriteLine(IsCreditCardNumberValid(Console.ReadLine()));
         Console.WriteLine(GenerateNextCreditCardNumber(Console.ReadLine()));
