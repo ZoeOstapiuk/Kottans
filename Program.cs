@@ -4,6 +4,10 @@ class Program
 {
     public static string GetCreditCardVendor(string CardNumber)
     {
+        if (!IsCreditCardNumberValid(CardNumber))
+        {
+            return "Unknown";
+        }
         if (CardNumber[0] == '4')
         {
             return "Visa";
@@ -61,10 +65,17 @@ class Program
                 i--;
             }
         }
+        
+        string CurrentVendor = GetCreditCardVendor(CardNumber);
+
         long iCardNumber = long.Parse(CardNumber);
         do
         {
             iCardNumber++;
+            if (GetCreditCardVendor(iCardNumber.ToString()) != CurrentVendor)
+            {
+                return "No more card numbers available for this vendor.";
+            }
         }
         while (!IsCreditCardNumberValid(iCardNumber.ToString()));
         return iCardNumber.ToString();
