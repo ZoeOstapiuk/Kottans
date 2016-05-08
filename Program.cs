@@ -8,25 +8,43 @@ class Program
         {
             return "Unknown";
         }
+
+        for (int i = 0; i < CardNumber.Length; i++)
+        {
+            if (CardNumber[i] == ' ')
+            {
+                CardNumber = CardNumber.Remove(i, 1);
+                i--;
+            }
+        }
         if (CardNumber[0] == '4')
         {
-            return "Visa";
+            if (CardNumber.Length == 13 || CardNumber.Length == 16 || CardNumber.Length == 19)
+                return "Visa";
+            return "Unknown";
         }
         if (Int32.Parse(CardNumber.Substring(0, 2)) >= 51 && Int32.Parse(CardNumber.Substring(0, 2)) <= 55)
         {
-            return "MasterCard";
+            if (CardNumber.Length == 16)
+                return "MasterCard";
+            return "Unknown";
         }
         if (Int32.Parse(CardNumber.Substring(0, 2)) == 34 || Int32.Parse(CardNumber.Substring(0, 2)) == 37)
         {
-            return "American Express";
+            if (CardNumber.Length == 15)
+                return "American Express";
+            return "Unknown.";
         }
         if (Int32.Parse(CardNumber.Substring(0, 2)) == 50 || (Int32.Parse(CardNumber.Substring(0, 2)) >= 56 && Int32.Parse(CardNumber.Substring(0, 2)) <= 69))
         {
-            return "Maestro";
+            if (CardNumber.Length >= 12 && CardNumber.Length <= 19)
+                return "Maestro";
+            return "Unknown";
         }
         if (Int32.Parse(CardNumber.Substring(0, 4)) >= 3528 && Int32.Parse(CardNumber.Substring(0, 4)) <= 3589)
         {
-            return "JCB";
+            if (CardNumber.Length == 16)
+                return "JCB";
         }
         return "Unknown";
     }
@@ -40,6 +58,11 @@ class Program
                 i--;
             }
         }
+        if (CardNumber.Length < 12)   //Minimal length allowed for vendors available. (Maestro)
+        {
+            return false;
+        }
+
         int iSum = 0;
         for (int i = CardNumber.Length - 1; i >= 0; i--)
         {
@@ -65,19 +88,32 @@ class Program
                 i--;
             }
         }
-        
-        string CurrentVendor = GetCreditCardVendor(CardNumber);
+
+        if (CardNumber.Length < 12)   //Minimal length allowed for vendors available. (Maestro)
+        {
+            return "Unknown vendor. Cannot generate next valid card number.";
+        }
+
+        string CurrentVendor;
+        if (CardNumber[0] == '4') CurrentVendor = "Visa";
+        else if (Int32.Parse(CardNumber.Substring(0, 2)) >= 51 && Int32.Parse(CardNumber.Substring(0, 2)) <= 55) CurrentVendor = "MasterCard";
+        else if (Int32.Parse(CardNumber.Substring(0, 2)) == 34 || Int32.Parse(CardNumber.Substring(0, 2)) == 37) CurrentVendor = "American Express";
+        else if (Int32.Parse(CardNumber.Substring(0, 2)) == 50 || (Int32.Parse(CardNumber.Substring(0, 2)) >= 56 && Int32.Parse(CardNumber.Substring(0, 2)) <= 69))
+            CurrentVendor = "Maestro";
+        else if (Int32.Parse(CardNumber.Substring(0, 4)) >= 3528 && Int32.Parse(CardNumber.Substring(0, 4)) <= 3589) CurrentVendor = "JCB";
+        else return "Unknown vendor. Cannot generate next valid card number.";
 
         long iCardNumber = long.Parse(CardNumber);
         do
         {
             iCardNumber++;
-            if (GetCreditCardVendor(iCardNumber.ToString()) != CurrentVendor)
-            {
-                return "No more card numbers available for this vendor.";
-            }
         }
         while (!IsCreditCardNumberValid(iCardNumber.ToString()));
+
+        if (GetCreditCardVendor(iCardNumber.ToString()) != CurrentVendor)
+        {
+            return "No more card numbers available for this vendor.";
+        }
         return iCardNumber.ToString();
     }
     public static void Main()
