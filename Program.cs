@@ -58,7 +58,7 @@ class Program
                 i--;
             }
         }
-        if (CardNumber.Length < 12)   //Minimal length allowed for vendors available. (Maestro)
+        if (CardNumber.Length < 12 || CardNumber.Length > 19)   //Minimal length allowed for vendors available (Maestro) and max (Maestro, Visa).
         {
             return false;
         }
@@ -89,7 +89,7 @@ class Program
             }
         }
 
-        if (CardNumber.Length < 12)   //Minimal length allowed for vendors available. (Maestro)
+        if (CardNumber.Length < 12 || CardNumber.Length > 19)   //Minimal length allowed for vendors available (Maestro) and max (Maestro, Visa).
         {
             return "Unknown vendor. Cannot generate next valid card number.";
         }
